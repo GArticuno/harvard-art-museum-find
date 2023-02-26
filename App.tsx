@@ -1,20 +1,39 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import {
+  useFonts,
+  Inter_400Regular,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  Inter_800ExtraBold
+} from "@expo-google-fonts/inter";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+import { Loading } from "./src/components/Loading";
+import Routes from "./src/routes";
+
+const queryClient = new QueryClient()
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    Inter_800ExtraBold
+  });
+
+  if(!fontsLoaded) {
+    return  (
+      <View className="flex-1 items-center justify-center">
+        <Loading />
+      </View>
+    );;
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <QueryClientProvider client={queryClient}>
+      <Routes />
+      <StatusBar style="dark" backgroundColor="transparent" translucent />
+    </QueryClientProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
